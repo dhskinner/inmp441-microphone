@@ -219,7 +219,7 @@ namespace WebUi
 <body>
   <section class="panel">
     <div class="head">
-      <h1>ESP32-S3 Realtime Spectrogram</h1>
+      <h1>Realtime Spectrogram</h1>
       <div id="status" class="meta">Connecting...</div>
     </div>
     <div class="chart">
