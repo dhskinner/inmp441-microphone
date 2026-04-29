@@ -1,9 +1,10 @@
 #pragma once
+#include "settings.h"
 
 namespace WebUi
 {
 
-    inline constexpr char PAGE[] PROGMEM = R"HTML(
+  inline constexpr char PAGE[] PROGMEM = R"HTML(
 <!doctype html>
 <html lang="en">
 <head>
@@ -250,7 +251,7 @@ namespace WebUi
     </div>
     <div class="foot">
       <span id="fps">FPS: --</span>
-      <span>Band: 80 Hz to 8 kHz (log scale)</span>
+      <span id="bandLabel">Band: --</span>
       <span>Each vertical column is one FFT frame</span>
     </div>
   </section>
@@ -258,14 +259,15 @@ namespace WebUi
   <script>
     const statusEl = document.getElementById('status');
     const fpsEl = document.getElementById('fps');
+    const bandLabelEl = document.getElementById('bandLabel');
     const yTicksEl = document.getElementById('yTicks');
     const canvas = document.getElementById('spectrogram');
     const ctx = canvas.getContext('2d', { alpha: false });
     const h = canvas.height;
     const w = canvas.width;
-    const minFreqHz = 80;
-    const maxFreqHz = 8000;
-    const tickFreqs = [80, 125, 250, 500, 1000, 2000, 4000, 8000];
+    let minFreqHz = 80;
+    let maxFreqHz = 8000;
+    let tickFreqs = [80, 125, 250, 500, 1000, 2000, 4000, 8000];
     let frames = 0;
     let lastFpsMs = performance.now();
     let latestBins = null;
@@ -273,6 +275,22 @@ namespace WebUi
     function formatHz(v) {
       if (v >= 1000) return `${(v / 1000).toFixed(v % 1000 === 0 ? 0 : 1)} k`;
       return `${v}`;
+    }
+
+    function chooseTicks(minHz, maxHz) {
+      const allTicks = [50, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000];
+      const inRange = allTicks.filter((f) => f >= minHz && f <= maxHz);
+      if (inRange.length <= 8) {
+        return inRange;
+      }
+
+      const out = [];
+      const last = inRange.length - 1;
+      for (let i = 0; i < 8; i++) {
+        const idx = Math.round((i / 7) * last);
+        out.push(inRange[idx]);
+      }
+      return [...new Set(out)];
     }
 
     function renderFrequencyTicks() {
@@ -288,6 +306,26 @@ namespace WebUi
         tick.textContent = formatHz(f);
         yTicksEl.appendChild(tick);
       });
+
+      bandLabelEl.textContent = `Band: ${formatHz(minFreqHz)}Hz to ${formatHz(maxFreqHz)}Hz (log scale)`;
+    }
+
+    async function loadSpectrumConfig() {
+      try {
+        const r = await fetch('/spectrum', { cache: 'no-store' });
+        if (!r.ok) {
+          return;
+        }
+        const cfg = await r.json();
+        const minHz = Number(cfg.min_hz);
+        const maxHz = Number(cfg.max_hz);
+        if (Number.isFinite(minHz) && Number.isFinite(maxHz) && minHz > 0 && maxHz > minHz) {
+          minFreqHz = minHz;
+          maxFreqHz = maxHz;
+          tickFreqs = chooseTicks(minFreqHz, maxFreqHz);
+        }
+      } catch (_e) {
+      }
     }
 
     function palette(v) {
@@ -345,9 +383,11 @@ namespace WebUi
 
     ctx.fillStyle = 'rgb(0,0,0)';
     ctx.fillRect(0, 0, w, h);
-    renderFrequencyTicks();
-    requestAnimationFrame(renderLoop);
-    connect();
+    loadSpectrumConfig().finally(() => {
+      renderFrequencyTicks();
+      requestAnimationFrame(renderLoop);
+      connect();
+    });
   </script>
 </body>
 </html>
