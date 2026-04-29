@@ -1,8 +1,6 @@
 # ESP32 INMP441 Microphone Visualizer
 
-This project runs on an ESP32-S3 and streams microphone audio data for a realtime web spectrogram, VU meter, and waveform display.
-
-A script is also included for streaming audio to MATLAB.
+This project runs on an ESP32-S3 and streams microphone audio data for a realtime web spectrogram, VU meter, and waveform display. An experimental (untested) example script is also included for streaming audio to MATLAB.
 
 ## 1) What You Need
 
@@ -27,8 +25,6 @@ Some documentation to assist is included in the repository:
 - [INMP441 datasheet](docs/INMP441.pdf)
 - [MATLAB realtime audio client](docs/matlab_realtime_audio_client.m)
 - Unexpected Maker ESP32 ProS3 [schematic](docs/schematic-pros3.pdf) and [pin reference](docs/ProS3_Pin_Reference.png)
-
-n.b. you can use any ESP32 board - this one was just one I had laying around
 
 ## 2) Install Required Tools
 
@@ -92,15 +88,16 @@ https://github.com/dhskinner/inmp441-microphone
 
 ### Board settings
 
-The project should run on any ESP32 (currently an Unexpected Maker ProS3) or other microcontrollers that support I2S. 
+The project should run on any ESP32 or other microcontroller that supports I2S. 
 
-For setup of alternative boards follow the platform.io guide at https://docs.platformio.org/en/latest/boards/index.html and update pin settings in src/settings.h:
+For board setup follow the platform.io guide at https://docs.platformio.org/en/latest/boards/index.html and update pin settings in src/settings.h:
 
 ```cpp
 #define I2S_WS 38
 #define I2S_SD 40
 #define I2S_SCK 39
 ```
+n.b. you can use any ESP32 board - currently the code is configured for an Unexpected Maker ProS3 which was just one I had laying around
 
 ### Wi-Fi credentials
 
