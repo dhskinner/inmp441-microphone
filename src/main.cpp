@@ -41,5 +41,5 @@ void loop()
   bool updated = audio.process();
 
   // service the websocket clients
-  web.process(updated, audio.spectrum());
+  web.process(updated, audio.spectrum(), audio.pcm());
 }

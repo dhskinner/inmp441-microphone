@@ -29,6 +29,10 @@ public:
   AudioServer();
   void init();
   bool process();
+  inline const int16_t *pcm() const
+  {
+    return pcmSamples;
+  }
   inline Spectrum &spectrum()
   {
     return spectrumBins;

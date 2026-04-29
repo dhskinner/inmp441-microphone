@@ -17,6 +17,7 @@ port = 3333;
 windowSeconds = 6;         % Display window length
 specNfft = 512;
 specOverlap = 384;
+specDynamicRangeDb = 80;    % Color range below the current peak (dB)
 
 c = tcpclient(host, port, "Timeout", 8);
 fprintf("Connected to %s:%d\n", host, port);
@@ -79,10 +80,22 @@ while isvalid(f)
     ylim(ax1, [-1 1]);
     grid(ax1, "on");
 
-    spectrogram(ring, hann(specNfft), specOverlap, specNfft, sampleRate, "yaxis", "power", ax2);
+    [~, fHz, tSpec, p] = spectrogram(ring, hann(specNfft), specOverlap, specNfft, sampleRate, "power");
+    pDb = 10 * log10(p + eps);
+
+    imagesc(ax2, tSpec, fHz / 1000, pDb);
+    axis(ax2, "xy");
+
+    % Use robust peak tracking so short transients do not collapse the color range.
+    peakDb = prctile(pDb(:), 99.5);
+    caxis(ax2, [peakDb - specDynamicRangeDb, peakDb]);
+
     title(ax2, "Spectrogram");
+    xlabel(ax2, "Time (s)");
     ylabel(ax2, "Frequency (kHz)");
     colormap(ax2, turbo);
+    cb = colorbar(ax2);
+    cb.Label.String = "Power/Frequency (dB/Hz)";
 
     drawnow limitrate;
 end

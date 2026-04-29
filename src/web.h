@@ -26,11 +26,11 @@ protected:
                  void *arg,
                  uint8_t *data,
                  size_t len);
-    void pushSpectrum(Spectrum &spectrum);
+    void pushSpectrum(Spectrum &spectrum, const int16_t *pcmSamples);
 
 public:
     WebServer();
     void init();
     void connect();
-    void process(bool updated, Spectrum &spectrum);
+    void process(bool updated, Spectrum &spectrum, const int16_t *pcmSamples);
 };

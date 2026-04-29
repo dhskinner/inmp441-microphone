@@ -42,7 +42,7 @@ namespace WebUi
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 16px;
-      padding: 14px;
+      padding: 12px;
       backdrop-filter: blur(4px);
       box-shadow: 0 10px 36px rgba(0, 0, 0, 0.35);
       animation: panelIn 500ms ease-out;
@@ -53,7 +53,7 @@ namespace WebUi
       align-items: baseline;
       justify-content: space-between;
       gap: 10px;
-      margin: 2px 2px 12px;
+      margin: 2px 2px 8px;
     }
 
     h1 {
@@ -69,9 +69,9 @@ namespace WebUi
       white-space: nowrap;
     }
 
-    canvas {
+    .spec-canvas {
       width: 100%;
-      height: min(72vh, 480px);
+      height: clamp(170px, 29vh, 260px);
       display: block;
       border-radius: 10px;
       border: 1px solid var(--line);
@@ -79,11 +79,96 @@ namespace WebUi
       image-rendering: pixelated;
     }
 
+    .vu-block {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(3, 9, 13, 0.55);
+      padding: 8px;
+    }
+
+    .vu-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--ink-dim);
+      font-size: 0.74rem;
+      margin-bottom: 6px;
+    }
+
+    .vu-head .title {
+      color: var(--ink);
+      opacity: 0.92;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .vu-canvas {
+      width: 100%;
+      height: clamp(84px, 14.5vh, 130px);
+      display: block;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(4, 12, 17, 0.9);
+      image-rendering: pixelated;
+    }
+
+    .vu-axis {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--ink-dim);
+      font-size: 0.74rem;
+    }
+
+    .wave-block {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(3, 9, 13, 0.55);
+      padding: 8px;
+    }
+
+    .wave-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      color: var(--ink-dim);
+      font-size: 0.74rem;
+      margin-bottom: 6px;
+    }
+
+    .wave-head .title {
+      color: var(--ink);
+      opacity: 0.92;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .wave-canvas {
+      width: 100%;
+      height: clamp(84px, 14.5vh, 130px);
+      display: block;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(4, 12, 17, 0.9);
+      image-rendering: pixelated;
+    }
+
+    .wave-axis {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--ink-dim);
+      font-size: 0.74rem;
+    }
+
     .chart {
       display: grid;
-      grid-template-columns: 1fr 52px;
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 8px;
       align-items: stretch;
+      margin-top: 10px;
     }
 
     .plot {
@@ -91,7 +176,7 @@ namespace WebUi
       grid-template-columns: 26px 1fr;
       grid-template-rows: 1fr auto;
       gap: 6px 8px;
-      min-height: 220px;
+      min-height: 0;
     }
 
     .y-label {
@@ -146,69 +231,79 @@ namespace WebUi
       border: 1px solid var(--line);
       border-radius: 10px;
       background: rgba(3, 9, 13, 0.55);
-      padding: 8px 6px;
+      padding: 8px;
       display: grid;
-      grid-template-columns: 1fr auto;
-      column-gap: 6px;
+      grid-template-columns: 1fr;
+      row-gap: 6px;
       align-items: stretch;
-      min-height: 220px;
+      min-height: 0;
     }
 
     .legend-bar {
       border-radius: 6px;
-      background: linear-gradient(to top, rgb(0, 0, 204) 0%, rgb(60, 80, 180) 32%, rgb(190, 120, 30) 72%, rgb(255, 255, 0) 100%);
+      background: linear-gradient(to right, rgb(0, 0, 204) 0%, rgb(60, 80, 180) 32%, rgb(190, 120, 30) 72%, rgb(255, 255, 0) 100%);
       border: 1px solid rgba(180, 230, 255, 0.2);
-      min-width: 16px;
+      min-height: 14px;
+      min-width: 0;
     }
 
     .legend-labels {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       justify-content: space-between;
       font-size: 0.72rem;
       color: var(--ink-dim);
-      text-align: right;
+      text-align: left;
     }
 
     .legend-title {
-      grid-column: 1 / span 2;
       font-size: 0.72rem;
       color: var(--ink);
       opacity: 0.92;
-      margin-bottom: 6px;
-      text-align: center;
+      margin-bottom: 0;
+      text-align: left;
     }
 
     @media (max-width: 760px) {
-      .chart {
-        grid-template-columns: 1fr;
+      .spec-canvas {
+        height: clamp(160px, 34vh, 240px);
       }
 
-      .legend {
-        min-height: 120px;
-        grid-template-columns: 1fr;
-        row-gap: 8px;
-      }
-
-      .legend-bar {
-        min-height: 18px;
-        min-width: 0;
-        background: linear-gradient(to right, rgb(0, 0, 204) 0%, rgb(60, 80, 180) 32%, rgb(190, 120, 30) 72%, rgb(255, 255, 0) 100%);
-      }
-
-      .legend-labels {
-        flex-direction: row;
+      .wave-canvas,
+      .vu-canvas {
+        height: clamp(80px, 16vh, 118px);
       }
     }
 
     .foot {
-      margin-top: 10px;
+      margin-top: 8px;
       color: var(--ink-dim);
       font-size: 0.8rem;
       display: flex;
       justify-content: space-between;
       gap: 8px;
       flex-wrap: wrap;
+    }
+
+    .controls {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink-dim);
+      font-size: 0.8rem;
+    }
+
+    .controls input[type="range"] {
+      width: min(360px, 100%);
+      accent-color: #f6d64a;
+    }
+
+    .controls .value {
+      color: var(--ink);
+      min-width: 52px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
 
     @keyframes panelIn {
@@ -223,11 +318,25 @@ namespace WebUi
       <h1>Realtime Spectrogram</h1>
       <div id="status" class="meta">Connecting...</div>
     </div>
+    <div class="wave-block">
+      <div class="wave-head">
+        <span class="title">Waveform</span>
+        <span>Downsampled PCM</span>
+      </div>
+      <canvas id="waveform" class="wave-canvas" width="640" height="128"></canvas>
+      <div class="wave-axis">
+        <span id="waveT0">-12.8 s</span>
+        <span id="waveT1">-9.6 s</span>
+        <span>Time (s, newest at right)</span>
+        <span id="waveT2">-3.2 s</span>
+        <span>Now</span>
+      </div>
+    </div>
     <div class="chart">
       <div class="plot">
         <div class="y-label">Frequency (Hz)</div>
         <div class="canvas-wrap">
-          <canvas id="spectrogram" width="640" height="64"></canvas>
+          <canvas id="spectrogram" class="spec-canvas" width="640" height="64"></canvas>
           <div id="yTicks" class="y-ticks" aria-hidden="true">
           </div>
         </div>
@@ -243,16 +352,38 @@ namespace WebUi
         <div class="legend-title">Intensity (dBFS)</div>
         <div class="legend-bar" aria-hidden="true"></div>
         <div class="legend-labels">
-          <span>-20</span>
-          <span>-55</span>
-          <span>-90</span>
+          <span id="legendTop">-20</span>
+          <span id="legendMid">-55</span>
+          <span id="legendBottom">-90</span>
         </div>
+      </div>
+    </div>
+    <div class="vu-block">
+      <div class="vu-head">
+        <span class="title">Spectrum VU Meter</span>
+        <span>Peak hold</span>
+      </div>
+      <canvas id="vuMeter" class="vu-canvas" width="640" height="120"></canvas>
+      <div class="vu-axis">
+        <span id="vuMin">80 Hz</span>
+        <span id="vuMid">1.2 kHz</span>
+        <span id="vuMax">8.0 kHz</span>
       </div>
     </div>
     <div class="foot">
       <span id="fps">FPS: --</span>
       <span id="bandLabel">Band: --</span>
       <span>Each vertical column is one FFT frame</span>
+      <div class="controls">
+        <label for="rangeDb">Dynamic range</label>
+        <input id="rangeDb" type="range" min="35" max="70" step="1" value="70" />
+        <span id="rangeDbValue" class="value">70 dB</span>
+      </div>
+      <div class="controls">
+        <label for="waveGain">Wave gain</label>
+        <input id="waveGain" type="range" min="1.0" max="4.0" step="0.1" value="2.6" />
+        <span id="waveGainValue" class="value">2.6x</span>
+      </div>
     </div>
   </section>
 
@@ -261,20 +392,62 @@ namespace WebUi
     const fpsEl = document.getElementById('fps');
     const bandLabelEl = document.getElementById('bandLabel');
     const yTicksEl = document.getElementById('yTicks');
+    const rangeDbEl = document.getElementById('rangeDb');
+    const rangeDbValueEl = document.getElementById('rangeDbValue');
+    const waveGainEl = document.getElementById('waveGain');
+    const waveGainValueEl = document.getElementById('waveGainValue');
+    const vuMinEl = document.getElementById('vuMin');
+    const vuMidEl = document.getElementById('vuMid');
+    const vuMaxEl = document.getElementById('vuMax');
+    const waveT0El = document.getElementById('waveT0');
+    const waveT1El = document.getElementById('waveT1');
+    const waveT2El = document.getElementById('waveT2');
+    const legendTopEl = document.getElementById('legendTop');
+    const legendMidEl = document.getElementById('legendMid');
+    const legendBottomEl = document.getElementById('legendBottom');
     const canvas = document.getElementById('spectrogram');
     const ctx = canvas.getContext('2d', { alpha: false });
+    const vuCanvas = document.getElementById('vuMeter');
+    const vuCtx = vuCanvas.getContext('2d', { alpha: false });
+    const waveCanvas = document.getElementById('waveform');
+    const waveCtx = waveCanvas.getContext('2d', { alpha: false });
     const h = canvas.height;
     const w = canvas.width;
+    const vuH = vuCanvas.height;
+    const vuW = vuCanvas.width;
+    const waveH = waveCanvas.height;
+    const waveW = waveCanvas.width;
+    const RANGE_DB_STORAGE_KEY = 'specDisplayRangeDb';
+    const WAVE_GAIN_STORAGE_KEY = 'specWaveGain';
+    const MIN_DBFS = -90;
+    const MAX_DBFS = -20;
+    const PEAK_ATTACK = 0.35;
+    const PEAK_RELEASE = 0.06;
+    const WAVE_STRIP_WIDTH = 1;
     let minFreqHz = 80;
     let maxFreqHz = 8000;
+    let waveformBins = 128;
+    let wsFrameBytes = h + waveformBins * 2;
+    let wsPushIntervalMs = 80;
     let tickFreqs = [80, 125, 250, 500, 1000, 2000, 4000, 8000];
     let frames = 0;
     let lastFpsMs = performance.now();
     let latestBins = null;
+    let latestWavePcm = null;
+    let displayTopDb = MAX_DBFS;
+    let displayRangeDb = 70;
+    let waveVerticalGain = 2.6;
+    let vuLevels = new Float32Array(h);
+    let vuPeaks = new Float32Array(h);
+    let vuPeakHold = new Uint16Array(h);
 
     function formatHz(v) {
       if (v >= 1000) return `${(v / 1000).toFixed(v % 1000 === 0 ? 0 : 1)} k`;
       return `${v}`;
+    }
+
+    function formatSeconds(v) {
+      return `-${v.toFixed(v >= 10 ? 0 : 1)} s`;
     }
 
     function chooseTicks(minHz, maxHz) {
@@ -308,6 +481,17 @@ namespace WebUi
       });
 
       bandLabelEl.textContent = `Band: ${formatHz(minFreqHz)}Hz to ${formatHz(maxFreqHz)}Hz (log scale)`;
+      const midHz = Math.sqrt(minFreqHz * maxFreqHz);
+      vuMinEl.textContent = `${formatHz(minFreqHz)}Hz`;
+      vuMidEl.textContent = `${formatHz(midHz)}Hz`;
+      vuMaxEl.textContent = `${formatHz(maxFreqHz)}Hz`;
+    }
+
+    function updateWaveTimeAxis() {
+      const totalSeconds = (waveW * WAVE_STRIP_WIDTH * wsPushIntervalMs) / 1000;
+      waveT0El.textContent = formatSeconds(totalSeconds);
+      waveT1El.textContent = formatSeconds(totalSeconds * 0.75);
+      waveT2El.textContent = formatSeconds(totalSeconds * 0.25);
     }
 
     async function loadSpectrumConfig() {
@@ -324,8 +508,27 @@ namespace WebUi
           maxFreqHz = maxHz;
           tickFreqs = chooseTicks(minFreqHz, maxFreqHz);
         }
+
+        const wfBins = Number(cfg.waveform_bins);
+        if (Number.isInteger(wfBins) && wfBins >= 16 && wfBins <= 1024) {
+          waveformBins = wfBins;
+        }
+
+        const frameBytes = Number(cfg.ws_frame_bytes);
+        if (Number.isInteger(frameBytes) && frameBytes >= h && frameBytes <= 4096) {
+          wsFrameBytes = frameBytes;
+        } else {
+          wsFrameBytes = h + waveformBins * 2;
+        }
+
+        const pushMs = Number(cfg.ws_push_interval_ms);
+        if (Number.isFinite(pushMs) && pushMs >= 10 && pushMs <= 1000) {
+          wsPushIntervalMs = pushMs;
+        }
       } catch (_e) {
       }
+
+      updateWaveTimeAxis();
     }
 
     function palette(v) {
@@ -336,14 +539,187 @@ namespace WebUi
       return [r | 0, g | 0, b | 0];
     }
 
-    function drawColumn(values) {
+    function clamp(v, lo, hi) {
+      return Math.min(hi, Math.max(lo, v));
+    }
+
+    function setDisplayRange(v, persist) {
+      const range = clamp(Number(v), Number(rangeDbEl.min), Number(rangeDbEl.max));
+      displayRangeDb = range;
+      rangeDbEl.value = `${range}`;
+      rangeDbValueEl.textContent = `${range} dB`;
+      if (persist) {
+        try {
+          localStorage.setItem(RANGE_DB_STORAGE_KEY, `${range}`);
+        } catch (_e) {
+        }
+      }
+      updateLegend(displayTopDb);
+    }
+
+    function setWaveGain(v, persist) {
+      const gain = clamp(Number(v), Number(waveGainEl.min), Number(waveGainEl.max));
+      waveVerticalGain = gain;
+      waveGainEl.value = `${gain}`;
+      waveGainValueEl.textContent = `${gain.toFixed(1)}x`;
+      if (persist) {
+        try {
+          localStorage.setItem(WAVE_GAIN_STORAGE_KEY, `${gain}`);
+        } catch (_e) {
+        }
+      }
+    }
+
+    function binToDbfs(v) {
+      return MIN_DBFS + (v / 255) * (MAX_DBFS - MIN_DBFS);
+    }
+
+    function percentileBin(values, pct) {
+      const sorted = Array.from(values).sort((a, b) => a - b);
+      const idx = Math.round(clamp((pct / 100) * (sorted.length - 1), 0, sorted.length - 1));
+      return sorted[idx];
+    }
+
+    function ensureVuState(count) {
+      if (vuLevels.length === count) {
+        return;
+      }
+      vuLevels = new Float32Array(count);
+      vuPeaks = new Float32Array(count);
+      vuPeakHold = new Uint16Array(count);
+    }
+
+    function fmtDb(v) {
+      return `${Math.round(v)}`;
+    }
+
+    function updateLegend(topDb) {
+      const bottomDb = topDb - displayRangeDb;
+      const midDb = topDb - displayRangeDb * 0.5;
+      legendTopEl.textContent = fmtDb(topDb);
+      legendMidEl.textContent = fmtDb(midDb);
+      legendBottomEl.textContent = fmtDb(bottomDb);
+    }
+
+    function drawVu(values, displayBottomDb) {
+      const count = values.length;
+      ensureVuState(count);
+
+      vuCtx.fillStyle = 'rgb(0,0,0)';
+      vuCtx.fillRect(0, 0, vuW, vuH);
+
+      const pitch = vuW / count;
+      const barW = Math.max(2, Math.floor(pitch) - 1);
+      const segCount = 20;
+      const segGap = 1;
+      const segH = Math.max(2, Math.floor((vuH - (segCount - 1) * segGap) / segCount));
+
+      for (let i = 0; i < count; i++) {
+        const db = binToDbfs(values[i] || 0);
+        const norm = clamp((db - displayBottomDb) / displayRangeDb, 0, 1);
+
+        const rise = norm > vuLevels[i] ? 0.45 : 0.12;
+        vuLevels[i] += (norm - vuLevels[i]) * rise;
+
+        if (vuLevels[i] >= vuPeaks[i]) {
+          vuPeaks[i] = vuLevels[i];
+          vuPeakHold[i] = 18;
+        } else if (vuPeakHold[i] > 0) {
+          vuPeakHold[i]--;
+        } else {
+          vuPeaks[i] = Math.max(0, vuPeaks[i] - 0.025);
+        }
+
+        const x = Math.floor(i * pitch);
+        for (let s = 0; s < segCount; s++) {
+          const y = vuH - ((s + 1) * segH + s * segGap);
+          if (y < 0) {
+            continue;
+          }
+          const threshold = (s + 1) / segCount;
+          if (vuLevels[i] >= threshold) {
+            const [r, g, b] = palette((threshold * 255) | 0);
+            vuCtx.fillStyle = `rgb(${r},${g},${b})`;
+          } else {
+            vuCtx.fillStyle = 'rgb(10,20,28)';
+          }
+          vuCtx.fillRect(x, y, barW, segH);
+        }
+
+        const peakY = vuH - Math.round(vuPeaks[i] * (vuH - 3));
+        vuCtx.fillStyle = 'rgb(255,96,70)';
+        vuCtx.fillRect(x, clamp(peakY, 0, vuH - 2), barW, 2);
+      }
+    }
+
+    function drawWave(pcmSamples) {
+      if (!pcmSamples || pcmSamples.length === 0) {
+        return;
+      }
+
+      waveCtx.drawImage(waveCanvas, -WAVE_STRIP_WIDTH, 0);
+      waveCtx.fillStyle = 'rgb(8,18,26)';
+      waveCtx.fillRect(waveW - WAVE_STRIP_WIDTH, 0, WAVE_STRIP_WIDTH, waveH);
+
+      const midY = Math.floor(waveH * 0.5);
+      const toY = (sample) => {
+        const n = clamp((sample / 32768) * waveVerticalGain, -1, 1);
+        return clamp(Math.round(midY - n * (waveH * 0.45)), 0, waveH - 1);
+      };
+
+      for (let col = 0; col < WAVE_STRIP_WIDTH; col++) {
+        const s0 = Math.floor((col * pcmSamples.length) / WAVE_STRIP_WIDTH);
+        const s1 = Math.max(s0 + 1, Math.floor(((col + 1) * pcmSamples.length) / WAVE_STRIP_WIDTH));
+
+        let minS = 32767;
+        let maxS = -32768;
+        let absPeak = 0;
+        for (let i = s0; i < s1; i++) {
+          const s = pcmSamples[i];
+          if (s < minS) minS = s;
+          if (s > maxS) maxS = s;
+          const absVal = Math.abs(s);
+          if (absVal > absPeak) absPeak = absVal;
+        }
+
+        const yMin = toY(maxS);
+        const yMax = toY(minS);
+        const level = clamp((absPeak / 32768) * 255, 0, 255);
+        const [r, g, b] = palette(level);
+        const x = waveW - WAVE_STRIP_WIDTH + col;
+
+        waveCtx.fillStyle = `rgba(${r},${g},${b},0.35)`;
+        waveCtx.fillRect(x, yMin, 1, Math.max(1, yMax - yMin + 1));
+        waveCtx.fillStyle = `rgb(${r},${g},${b})`;
+        waveCtx.fillRect(x, yMin, 1, 1);
+        waveCtx.fillRect(x, yMax, 1, 1);
+      }
+
+      waveCtx.fillStyle = 'rgba(180,230,255,0.18)';
+      waveCtx.fillRect(waveW - WAVE_STRIP_WIDTH, midY, WAVE_STRIP_WIDTH, 1);
+    }
+
+    function drawColumn(values, pcmSamples) {
+      const peakDb = binToDbfs(percentileBin(values, 99.5));
+      const targetTopDb = clamp(peakDb, MIN_DBFS + displayRangeDb, MAX_DBFS);
+      const alpha = targetTopDb > displayTopDb ? PEAK_ATTACK : PEAK_RELEASE;
+      displayTopDb += (targetTopDb - displayTopDb) * alpha;
+      const displayBottomDb = displayTopDb - displayRangeDb;
+
       ctx.drawImage(canvas, -1, 0);
       for (let y = 0; y < h; y++) {
         const idx = h - 1 - y;
-        const [r, g, b] = palette(values[idx] || 0);
+        const db = binToDbfs(values[idx] || 0);
+        const norm = clamp((db - displayBottomDb) / displayRangeDb, 0, 1);
+        const [r, g, b] = palette(norm * 255);
         ctx.fillStyle = `rgb(${r},${g},${b})`;
         ctx.fillRect(w - 1, y, 1, 1);
       }
+
+      drawVu(values, displayBottomDb);
+      drawWave(pcmSamples);
+
+      updateLegend(displayTopDb);
 
       frames++;
       const now = performance.now();
@@ -356,8 +732,9 @@ namespace WebUi
 
     function renderLoop() {
       if (latestBins) {
-        drawColumn(latestBins);
+        drawColumn(latestBins, latestWavePcm);
         latestBins = null;
+        latestWavePcm = null;
       }
       requestAnimationFrame(renderLoop);
     }
@@ -375,14 +752,55 @@ namespace WebUi
 
       ws.onmessage = (evt) => {
         if (!(evt.data instanceof ArrayBuffer)) return;
-        const bins = new Uint8Array(evt.data);
-        if (bins.length !== h) return;
+        const bytes = new Uint8Array(evt.data);
+        if (bytes.length < h) return;
+
+        const bins = bytes.slice(0, h);
+        let wavePcm = null;
+
+        if (bytes.length >= wsFrameBytes && wsFrameBytes >= h + waveformBins * 2) {
+          const dv = new DataView(evt.data);
+          wavePcm = new Int16Array(waveformBins);
+          for (let i = 0; i < waveformBins; i++) {
+            wavePcm[i] = dv.getInt16(h + i * 2, true);
+          }
+        }
+
         latestBins = bins;
+        latestWavePcm = wavePcm;
       };
     }
 
     ctx.fillStyle = 'rgb(0,0,0)';
     ctx.fillRect(0, 0, w, h);
+    vuCtx.fillStyle = 'rgb(0,0,0)';
+    vuCtx.fillRect(0, 0, vuW, vuH);
+    waveCtx.fillStyle = 'rgb(0,0,0)';
+    waveCtx.fillRect(0, 0, waveW, waveH);
+    rangeDbEl.addEventListener('input', () => setDisplayRange(rangeDbEl.value, true));
+    waveGainEl.addEventListener('input', () => setWaveGain(waveGainEl.value, true));
+    updateWaveTimeAxis();
+    try {
+      const savedRange = localStorage.getItem(RANGE_DB_STORAGE_KEY);
+      if (savedRange != null) {
+        setDisplayRange(savedRange, false);
+      } else {
+        setDisplayRange(displayRangeDb, false);
+      }
+    } catch (_e) {
+      setDisplayRange(displayRangeDb, false);
+    }
+    try {
+      const savedGain = localStorage.getItem(WAVE_GAIN_STORAGE_KEY);
+      if (savedGain != null) {
+        setWaveGain(savedGain, false);
+      } else {
+        setWaveGain(waveVerticalGain, false);
+      }
+    } catch (_e) {
+      setWaveGain(waveVerticalGain, false);
+    }
+    updateLegend(displayTopDb);
     loadSpectrumConfig().finally(() => {
       renderFrequencyTicks();
       requestAnimationFrame(renderLoop);

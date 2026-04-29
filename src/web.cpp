@@ -1,5 +1,13 @@
 #include "web.h"
 
+#include <cstring>
+
+namespace
+{
+    constexpr size_t WAVEFORM_DOWNSAMPLED_SAMPLES = 128;
+    constexpr size_t WS_FRAME_BYTES = FFT_BINS + (WAVEFORM_DOWNSAMPLED_SAMPLES * sizeof(int16_t));
+}
+
 WebServer::WebServer() : server(80),
                          ws("/ws")
 {
@@ -87,21 +95,24 @@ void WebServer::init()
 
     server.on("/spectrum", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                char body[200];
-                snprintf(body,
-                         sizeof(body),
-                         "{\"min_hz\":%u,\"max_hz\":%u,\"sample_rate\":%u,\"fft_bins\":%u}",
-                         static_cast<unsigned int>(SPECTRUM_MIN_HZ),
-                         static_cast<unsigned int>(SPECTRUM_MAX_HZ),
-                         static_cast<unsigned int>(SAMPLE_RATE),
-                         static_cast<unsigned int>(FFT_BINS));
-                request->send(200, "application/json", body); });
+                                char body[280];
+                                snprintf(body,
+                                                 sizeof(body),
+                                                 "{\"min_hz\":%u,\"max_hz\":%u,\"sample_rate\":%u,\"fft_bins\":%u,\"waveform_bins\":%u,\"ws_frame_bytes\":%u,\"ws_push_interval_ms\":%u}",
+                                                 static_cast<unsigned int>(SPECTRUM_MIN_HZ),
+                                                 static_cast<unsigned int>(SPECTRUM_MAX_HZ),
+                                                 static_cast<unsigned int>(SAMPLE_RATE),
+                                                 static_cast<unsigned int>(FFT_BINS),
+                                                 static_cast<unsigned int>(WAVEFORM_DOWNSAMPLED_SAMPLES),
+                                                 static_cast<unsigned int>(WS_FRAME_BYTES),
+                                                 static_cast<unsigned int>(WS_PUSH_INTERVAL_MS));
+                                request->send(200, "application/json", body); });
 
     server.begin();
     Serial.println("HTTP server started");
 }
 
-void WebServer::process(bool updated, Spectrum &spectrum)
+void WebServer::process(bool updated, Spectrum &spectrum, const int16_t *pcmSamples)
 {
     // signs of life
     if ((ws.count() > 0))
@@ -119,13 +130,14 @@ void WebServer::process(bool updated, Spectrum &spectrum)
     // push spectrum data to WS clients if connected and updated
     if (updated)
     {
-        pushSpectrum(spectrum);
+        pushSpectrum(spectrum, pcmSamples);
     }
 }
 
-void WebServer::pushSpectrum(Spectrum &spectrum)
+void WebServer::pushSpectrum(Spectrum &spectrum, const int16_t *pcmSamples)
 {
     static unsigned long lastPushMs = 0;
+    static uint8_t wsFrame[WS_FRAME_BYTES];
     if (ws.count() == 0)
     {
         return;
@@ -144,7 +156,33 @@ void WebServer::pushSpectrum(Spectrum &spectrum)
 
     lastPushMs = now;
 
-    ws.binaryAll(reinterpret_cast<const char *>(spectrum), FFT_BINS);
+    std::memcpy(wsFrame, spectrum, FFT_BINS);
+
+    for (size_t i = 0; i < WAVEFORM_DOWNSAMPLED_SAMPLES; i++)
+    {
+        const size_t start = (i * FFT_SAMPLES) / WAVEFORM_DOWNSAMPLED_SAMPLES;
+        size_t end = ((i + 1) * FFT_SAMPLES) / WAVEFORM_DOWNSAMPLED_SAMPLES;
+        if (end <= start)
+        {
+            end = start + 1;
+        }
+
+        int32_t accum = 0;
+        if (pcmSamples != nullptr)
+        {
+            for (size_t j = start; j < end; j++)
+            {
+                accum += static_cast<int32_t>(pcmSamples[j]);
+            }
+        }
+
+        const int16_t sample = static_cast<int16_t>(accum / static_cast<int32_t>(end - start));
+        const size_t offset = FFT_BINS + i * sizeof(int16_t);
+        wsFrame[offset] = static_cast<uint8_t>(sample & 0xFF);
+        wsFrame[offset + 1] = static_cast<uint8_t>((sample >> 8) & 0xFF);
+    }
+
+    ws.binaryAll(reinterpret_cast<const char *>(wsFrame), WS_FRAME_BYTES);
 }
 
 void WebServer::onEvent(AsyncWebSocket *serverRef,
